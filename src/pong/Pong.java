@@ -1,9 +1,11 @@
 package pong;
 
+import java.applet.AudioClip;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.MouseInfo;
 
+import javax.swing.JApplet;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -29,7 +31,8 @@ public class Pong {
 	static int mouseX = 0;
 	static boolean paddleLimits = true;
 	static boolean thickPaddle = false;
-
+	static AudioClip ACWallBlip = JApplet.newAudioClip(Pong.class.getResource("Wall Blip.wav"));
+	static AudioClip ACPaddleBlip = JApplet.newAudioClip(Pong.class.getResource("Paddle Blip.wav"));
 	public static void main(String[] args) {
 		String Diff = JOptionPane.showInputDialog("Easy / Medium / Hard / Custom");
 		if (Diff.equalsIgnoreCase("easy") || Diff.equalsIgnoreCase("e")) {
@@ -149,11 +152,9 @@ public class Pong {
 						frame.dispose();
 					}
 					balls--;
-					if (speed > 5) {
-						speed -= 5;
-					}
-					if (speed > 1) {
-						speed--;
+					speed = speed/2;
+					if(speed < 1){
+						speed = 1;
 					}
 					ballX = 30;
 					ballY = 30;
@@ -169,16 +170,23 @@ public class Pong {
 					if (score % 100 == 0) {
 						speed += SpInc100;
 					}
+					ACPaddleBlip.play();
 				}
+				//Walls
 				if (ballDirY == false && ballY <= 20) {
 					ballDirY = true;
+					ACWallBlip.play();
+					
 				}
 				if (ballDirX == false && ballX <= 20) {
 					ballDirX = true;
+					ACWallBlip.play();
 				}
 				if (ballDirX && ballX >= 980) {
 					ballDirX = false;
+					ACWallBlip.play();
 				}
+				//Motion
 				if (ballDirX) {
 					ballX = ballX + speed;
 				} else {
